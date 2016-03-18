@@ -1,0 +1,119 @@
+﻿@model EFstore.ViewModels.CateActivityVM
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<div class="row">
+    <div class="col-md-2">
+        <p>
+            @if (User.IsInRole("Admin"))
+            {
+                @Html.ActionLink("Create Category", "Create", "Category")
+            }       
+        </p>
+        <table class="table">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Categories[0].CategoryName)
+                </th>
+                <th></th>
+            </tr>
+            @foreach (var item in Model.Categories)
+            {
+                <tr>
+                    <td>
+                        @Html.ActionLink(Html.DisplayFor(modelItem => item.CategoryName).ToHtmlString(),
+                                  "Activities", "Home", new { categoryId = item.CategoryID }, null)
+                    </td>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <td>                
+                            @Html.ActionLink("Edit", "Edit", "Category", new { id = item.CategoryID }, null) |
+                            @Html.ActionLink("Details", "Details", "Category", new { id = item.CategoryID }, null) | <br />
+                            @Html.ActionLink("Delete", "Delete", "Category", new { id = item.CategoryID }, null)            
+                        </td>
+                     }
+                </tr>
+            }
+        </table>
+    </div>
+    <div class="col-md-10">
+    <p>
+        @if (User.IsInRole("Admin"))
+        {
+           @Html.ActionLink("Create Activity", "Create")
+        }
+    </p>
+        <table class="table">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Activities[0].ProductTitle)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Activities[0].Price)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Activities[0].StartTime)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Activities[0].EndTime)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Activities[0].MinBuyers)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Activities[0].CurrentBuyers)
+                </th>
+                <th></th>
+            </tr>
+
+            @foreach (var item in Model.Activities)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ProductTitle)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Price)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.StartTime)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EndTime)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MinBuyers)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CurrentBuyers)
+                    </td>
+@if (User.IsInRole("Admin"))
+{
+    <td>
+        @Html.ActionLink("Edit", "Edit", new { id = item.ActivityID }) | <br />
+        @*@Html.ActionLink("Details", "Details", new { id = item.GatherID }) | <br />*@
+        @Html.ActionLink("Delete", "Delete", new { id = item.ActivityID })
+    </td>
+}
+                    
+                    <td>
+                        @*@Html.ActionLink("Add to Cart", "AddOrder", new { id = item.ActivityID })*@
+                        @Ajax.ActionLink("Add to Cart", "Create", "Order", new { activityId = item.ActivityID },
+                            new AjaxOptions
+                            {
+                                UpdateTargetId = "OrderPanel",
+                                InsertionMode = InsertionMode.Replace,
+                                HttpMethod = "POST"
+                            }
+                        )
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>
+

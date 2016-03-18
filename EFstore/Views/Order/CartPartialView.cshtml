@@ -1,0 +1,7 @@
+﻿@model int
+@if (User.Identity.IsAuthenticated && Model != null)
+{
+    <b>
+        Items(<span id="OrderPanel">@Model</span>)
+    </b>@Html.ActionLink("in Cart", "Index", "Order")
+}

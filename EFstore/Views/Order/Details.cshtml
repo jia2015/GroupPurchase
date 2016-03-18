@@ -1,0 +1,71 @@
+﻿@model IEnumerable<EFstore.ViewModels.OrderDetailVM>
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div class="container">
+    <h4>OrderDetails</h4>
+    <hr />
+    @using (Html.BeginForm("Payment", "Order", FormMethod.Post, null))
+    {
+        <div class="main-content">@Html.ValidationSummary()</div>
+        <table class="table ">
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <input type="checkbox" data-value="@item.UnitPrice" id="chk-@item.OrderDetailID" name="chkOrderDetailIDs" value="@item.OrderDetailID" />
+                        <label for="chk-@item.OrderDetailID"> @item.ActivityName</label>
+                    </td>
+                    <td>
+                        @item.UnitPrice
+                    </td>
+                </tr>
+            }
+
+        </table>
+
+        <div class="col-lg-6 ">Total：<span id="sptotal">0</span></div><div class="col-lg-3"><input type="submit" value="Check Out" /> </div>
+        <div class="col-md-12"><span id="lbljsonresult"></span></div>
+    }
+</div>
+<p>
+    @Html.ActionLink("Back to List", "Index")
+</p>
+<script src="~/scripts/jquery-1.10.2.min.js"></script>
+<script type="text/javascript">
+    $(":checkbox").change(
+        function () {
+            var oldvalue = Number($("#sptotal").text());
+            var currentValue = Number($(this).data("value"));
+            if ($(this).prop("checked"))
+                oldvalue += currentValue;
+            else
+                oldvalue -= currentValue;
+            $("#sptotal").text(oldvalue)
+        }
+        );
+
+
+    $(document).ready(function () {
+        $("form[action$='Payment']").submit(
+            function () {
+
+                $.post(
+                 $(this).attr("action"),
+                   $(this).serialize(),
+                    function (responseData) {
+                        var msg = responseData;
+                        $('#lbljsonresult').html(msg.Message);
+
+                    }
+                 );
+
+                return false;
+            });
+    });
+
+</script>
