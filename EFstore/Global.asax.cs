@@ -7,6 +7,7 @@ using System.Web.Routing;
 using System.Web.Optimization;
 using System.Web.Security;
 using System.Security.Principal;
+using EFstore.App_Start;
 
 namespace EFstore
 {
@@ -17,6 +18,9 @@ namespace EFstore
             AreaRegistration.RegisterAllAreas();
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+
+            // Autofac and Automapper configurations
+            Bootstrapper.Run();
         }
 
         protected void Application_AuthenticateRequest(Object sender, EventArgs e)

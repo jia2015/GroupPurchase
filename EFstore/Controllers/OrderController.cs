@@ -5,7 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using EFstore.Models;
 using System.Net;
-using EFstore.Service;
+using EFstore.Services;
 using EFstore.ViewModels;
 using System.Data.Entity;
 using EFstore.Controllers;
@@ -15,23 +15,12 @@ namespace EFstore.Controllers
 {
     public class OrderController : Controller
     {
-        private DatabaseFactory dbf;
-        private UserRepository userRepo;
-        private OrderDetailRepository odRepo;
-        private IOrderDetailService _service;
+        private readonly IOrderDetailService _service;
 
-        public OrderController()
+        public OrderController(IOrderDetailService service)
         {
-            //this._service = service;
-            dbf = new DatabaseFactory();
-            userRepo = new UserRepository(dbf);
-            odRepo = new OrderDetailRepository(dbf);
-            _service = new OrderDetailService(userRepo, odRepo);
+            this._service = service;
         }
-
-        //public OrderController()
-        //{
-        //}
 
         private AccDbContext db = new AccDbContext();
 
